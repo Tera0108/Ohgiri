@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ohgiri</string>
+    <string name="creat_btn">お題の生成</string>
 </resources>
