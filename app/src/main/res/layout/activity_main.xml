@@ -1,84 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/score"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F1E578"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="236dp"
-        android:layout_height="43dp"
-        android:layout_marginStart="87dp"
-        android:layout_marginTop="154dp"
-        android:layout_marginEnd="88dp"
-        android:layout_marginBottom="43dp"
-        android:text="@string/creat_btn"
-        app:layout_constraintBottom_toTopOf="@+id/thema"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/thema"
-        android:layout_width="258dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="43dp"
-        android:layout_marginEnd="88dp"
-        android:background="#F3F0F0"
-        android:text="お題"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
-
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/answer"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/score"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="114dp"
-        android:background="@color/white"
-        android:hint="hint"
-        app:layout_constraintTop_toBottomOf="@+id/thema"
-        tools:layout_editor_absoluteX="0dp" />
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="128dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/answer"
-        tools:layout_editor_absoluteX="133dp" />
+        <!-- android:background="#F1E578"
+        tools:context=".MainActivity"> -->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="match_parent"-->
 
-    <TextView
-        android:id="@+id/comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/textView4"
-        tools:layout_editor_absoluteX="133dp" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="409dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="大喜利 GPT" />
 
-    <TextView
-        android:id="@+id/chatgptAnswerTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="ChatGPTの回答"
-        app:layout_constraintTop_toBottomOf="@+id/comment"
-        tools:layout_editor_absoluteX="133dp" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="240dp"
+            android:layout_height="55dp"
+            android:layout_marginStart="87dp"
+            android:layout_marginTop="154dp"
+            android:layout_marginEnd="88dp"
+            android:layout_marginBottom="43dp"
+            android:text="@string/creat_btn"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/thema"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/chatgptAnswer"
-        android:layout_width="200dp"
-        android:layout_height="107dp"
-        android:layout_marginTop="52dp"
-        android:text="TextView"
-        app:layout_constraintTop_toBottomOf="@+id/chatgptAnswerTitle"
-        tools:layout_editor_absoluteX="75dp" />
+        <TextView
+            android:id="@+id/thema"
+            android:layout_width="378dp"
+            android:layout_height="131dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="43dp"
+            android:layout_marginEnd="16dp"
+            android:background="#F3F0F0"
+            android:text="お題"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/answer"
+            android:layout_width="371dp"
+            android:layout_height="63dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/white"
+            android:hint="回答を入力してください"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thema" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="128dp"
+            android:layout_marginBottom="20dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/comment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="41dp"
+            android:text="TextView"
+            app:layout_constraintBottom_toTopOf="@+id/chatgptAnswerTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+        <TextView
+            android:id="@+id/chatgptAnswerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:text="ChatGPTの回答"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comment" />
+
+        <TextView
+            android:id="@+id/chatgptAnswer"
+            android:layout_width="200dp"
+            android:layout_height="107dp"
+            android:layout_marginTop="52dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chatgptAnswerTitle" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="採点してください"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/answer" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
