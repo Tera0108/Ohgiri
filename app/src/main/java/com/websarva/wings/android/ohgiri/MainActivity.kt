@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             var result = ""
             val url = URL(_url)
             val con = url.openConnection() as HttpURLConnection
+            // 1000だとタイムアウトになるので10000にのばした
             con.connectTimeout = 10000
             con.readTimeout = 10000
             con.requestMethod = "POST"
@@ -112,7 +113,7 @@ class MainActivity : AppCompatActivity() {
             }
             reader.close()
 
-            // NOTE: StringからJSONに変換する処理を追加
+            // TODO: StringからJSONに変換する処理を追加
             // 教科書p.294を見てね
             return sb.toString()
         }
