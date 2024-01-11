@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("debug","console log create")
 
-
         val scoringBtn = findViewById<Button>(R.id.scoringBtn)
         val scoringListener = ScoringListener()
         scoringBtn.setOnClickListener(scoringListener)
@@ -41,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             val output = findViewById<TextView>(R.id.theme)
 
-            val urlFull = "xxx"
+            val urlFull = "https://api.openai.com/v1/chat/completions"
             receiveChatGptResponse(urlFull)
 //            output.text = "お題だよ"
         }
@@ -55,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         val result = future.get()
     }
     private inner class ChatGptResponseBackGroundReceiver(url: String): Callable<String>{
+        //api reference : https://platform.openai.com/docs/api-reference/chat/create
         private val _url = url
 
         @WorkerThread
@@ -62,25 +62,46 @@ class MainActivity : AppCompatActivity() {
             var result = ""
             val url = URL(_url)
             val con = url.openConnection() as HttpURLConnection
-            con.connectTimeout = 1000
-            con.readTimeout = 1000
+            con.connectTimeout = 10000
+            con.readTimeout = 10000
             con.requestMethod = "POST"
+            // Bodyへ書き込むを行う
+            con.doOutput = true
+
+            // リクエストBodyのストリーミング有効化（どちらか片方を有効化）
+            // connection.setFixedLengthStreamingMode(bodyData.size)
+            con.setChunkedStreamingMode(0)
+
+            // ヘッダーの設定
+            con.setRequestProperty("Content-type", "application/json")
+            con.setRequestProperty("Authorization", "Bearer YOUR_API_KEY")
+
+            val bodyData = "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\": \"system\", \"content\":\"あなたはお笑い芸人です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}],\"temperature\":0.0,\"max_tokens\":256}"
 
             try {
                 con.connect()
+                // Bodyの書き込み
+                val outputStream = con.outputStream
+                outputStream.write(bodyData.toByteArray())
+                outputStream.flush()
+                outputStream.close()
+
                 val stream = con.inputStream
-                result = is2String(stream)
+                result = is2JSON(stream)
                 stream.close()
             }
             catch(ex: SocketTimeoutException) {
                 Log.w("debug", "通信タイムアウト", ex)
-
+            } catch (exception: Exception) {
+                Log.e("Error", exception.toString())
+            } finally {
+                con.disconnect()
+                Log.d("debug",result)
+                return result
             }
-            con.disconnect()
-            return result
         }
 
-        private fun is2String(stream: InputStream): String {
+        private fun is2JSON(stream: InputStream): String {
             val sb = StringBuilder()
             val reader = BufferedReader(InputStreamReader(
                 stream, StandardCharsets.UTF_8))
@@ -90,6 +111,9 @@ class MainActivity : AppCompatActivity() {
                 line = reader.readLine()
             }
             reader.close()
+
+            // NOTE: StringからJSONに変換する処理を追加
+            // 教科書p.294を見てね
             return sb.toString()
         }
     }
