@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.annotation.WorkerThread
 import com.google.android.material.textfield.TextInputEditText
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -41,25 +42,26 @@ class MainActivity : AppCompatActivity() {
             val output = findViewById<TextView>(R.id.theme)
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
-            receiveChatGptResponse(urlFull)
-//            output.text = "お題だよ"
+            val result = receiveChatGptResponse(urlFull)
+            if (result != null) {
+                output.text = result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content")
+            }
         }
-
     }
 
-    private fun receiveChatGptResponse(urlFull: String ){
+    private fun receiveChatGptResponse(urlFull: String ): JSONObject? {
         val backgroundReceiver = ChatGptResponseBackGroundReceiver(urlFull)
         val executeService = Executors.newSingleThreadExecutor()//
         val future = executeService.submit(backgroundReceiver)
-        val result = future.get()
+        return future.get()
     }
-    private inner class ChatGptResponseBackGroundReceiver(url: String): Callable<String>{
+    private inner class ChatGptResponseBackGroundReceiver(url: String): Callable<JSONObject>{
         //api reference : https://platform.openai.com/docs/api-reference/chat/create
         private val _url = url
 
         @WorkerThread
-        override fun call(): String {
-            var result = ""
+        override fun call(): JSONObject {
+            var result = JSONObject()
             val url = URL(_url)
             val con = url.openConnection() as HttpURLConnection
             // 1000だとタイムアウトになるので10000にのばした
@@ -97,12 +99,12 @@ class MainActivity : AppCompatActivity() {
                 Log.e("Error", exception.toString())
             } finally {
                 con.disconnect()
-                Log.d("debug",result)
+                Log.d("debug",result.toString())
                 return result
             }
         }
 
-        private fun is2JSON(stream: InputStream): String {
+        private fun is2JSON(stream: InputStream): JSONObject {
             val sb = StringBuilder()
             val reader = BufferedReader(InputStreamReader(
                 stream, StandardCharsets.UTF_8))
@@ -114,8 +116,7 @@ class MainActivity : AppCompatActivity() {
             reader.close()
 
             // TODO: StringからJSONに変換する処理を追加
-            // 教科書p.294を見てね
-            return sb.toString()
+            return JSONObject(sb.toString())
         }
     }
 
