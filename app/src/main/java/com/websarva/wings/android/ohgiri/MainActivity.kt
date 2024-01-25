@@ -22,6 +22,9 @@ import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
+
+    var messageData = "";
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -41,10 +44,15 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             val output = findViewById<TextView>(R.id.theme)
 
+            messageData = "{\"role\": \"system\", \"content\":\"あなたはお笑い芸人です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}"
+
             val urlFull = "https://api.openai.com/v1/chat/completions"
             val result = receiveChatGptResponse(urlFull)
             if (result != null) {
-                output.text = result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content")
+                val theme = result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content")
+                output.text = theme
+                messageData = messageData + ",{\"role\": \"assistant\", \"content\":\"" + theme + "\"}"
+                Log.d("debug","お題追加："+messageData)
             }
         }
     }
@@ -60,7 +68,7 @@ class MainActivity : AppCompatActivity() {
         private val _url = url
 
         @WorkerThread
-        override fun call(): JSONObject {
+        override fun call(): JSONObject? {
             var result = JSONObject()
             val url = URL(_url)
             val con = url.openConnection() as HttpURLConnection
@@ -79,7 +87,9 @@ class MainActivity : AppCompatActivity() {
             con.setRequestProperty("Content-type", "application/json")
             con.setRequestProperty("Authorization", "Bearer YOUR_API_KEY")
 
-            val bodyData = "{\"model\":\"gpt-3.5-turbo\",\"messages\":[{\"role\": \"system\", \"content\":\"あなたはお笑い芸人です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}],\"temperature\":0.0,\"max_tokens\":256}"
+            val bodyData = "{\"model\":\"gpt-3.5-turbo\",\"messages\":["+ messageData +"],\"temperature\":1.0,\"max_tokens\":256}"
+
+            Log.d("debug","リクエスト："+bodyData)
 
             try {
                 con.connect()
@@ -124,8 +134,24 @@ class MainActivity : AppCompatActivity() {
     private inner class ScoringListener: View.OnClickListener {
         override fun onClick(v: View?) {
             val answer = findViewById<TextInputEditText>(R.id.answer)
+            val output = findViewById<TextView>(R.id.scoreResult)
 
-            Log.d("debug",answer.text.toString())
+            val answerString = answer.text.toString()
+
+            Log.d("debug","入力した回答"+answerString)
+
+            messageData = messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を100点満点で採点してください。返答の形式は点数を示す整数値のみで。\"}"
+
+            val urlFull = "https://api.openai.com/v1/chat/completions"
+            val result = receiveChatGptResponse(urlFull)
+            if (result != null) {
+                val score = result.getJSONArray("choices").getJSONObject(0).getJSONObject("message").getString("content")
+                output.text = score
+                Log.d("debug","点数："+ score)
+                messageData = messageData + ",{\"role\": \"assistant\", \"content\":\"" + score + "\"}"
+                Log.d("debug","点数追加："+ messageData)
+            }
+
         }
 
     }
