@@ -108,23 +108,10 @@
             android:layout_marginEnd="168dp"
             android:layout_marginBottom="3dp"
             android:text="IPPON!!"
-            app:layout_constraintBottom_toTopOf="@+id/chatgptAnswerTitle"
+            app:layout_constraintBottom_toTopOf="@+id/chatgptAnswerBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scoreResult" />
-
-        <TextView
-            android:id="@+id/chatgptAnswerTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:layout_marginBottom="51dp"
-            android:text="ChatGPTの回答"
-            app:layout_constraintBottom_toTopOf="@+id/chatgptAnswer"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.487"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment" />
 
         <TextView
             android:id="@+id/chatgptAnswer"
@@ -138,7 +125,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chatgptAnswerTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/chatgptAnswerBtn" />
 
         <Button
             android:id="@+id/scoringBtn"
@@ -155,6 +142,20 @@
             app:layout_constraintTop_toBottomOf="@+id/answer"
             app:layout_constraintVertical_bias="0.023"
             app:layout_constraintVertical_chainStyle="spread" />
+
+        <Button
+            android:id="@+id/chatgptAnswerBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:text="ChatGPTの回答"
+            android:textSize="24dp"
+            app:layout_constraintBottom_toTopOf="@+id/chatgptAnswer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.487"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/comment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
