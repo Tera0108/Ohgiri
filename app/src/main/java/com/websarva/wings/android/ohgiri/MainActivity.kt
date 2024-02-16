@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         val chatgptAnswerBtn = findViewById<Button>(R.id.chatgptAnswerBtn)
         val chatgptAnswerListener = ChatgptAnswerListener()
         chatgptAnswerBtn.setOnClickListener(chatgptAnswerListener)
+
+        val retryBtn = findViewById<Button>(R.id.retryBtn)
+        val retryListener = RetryListener()
+        retryBtn.setOnClickListener(retryListener)
     }
 
     private inner class GetThemeListener : View.OnClickListener {
@@ -96,11 +100,11 @@ class MainActivity : AppCompatActivity() {
             con.setRequestProperty("Content-type", "application/json")
             con.setRequestProperty(
                 "Authorization",
-                "Bearer XXX"
+                "Bearer API_KEY"
             )
 
             val bodyData =
-                "{\"model\":\"gpt-3.5-turbo\",\"messages\":[" + messageData + "],\"temperature\":1.0,\"max_tokens\":256}"
+                "{\"model\":\"gpt-3.5-turbo\",\"messages\":[" + messageData + "],\"temperature\":1.0,\"max_tokens\":100}"
 
             Log.d("debug", "リクエスト：" + bodyData)
 
@@ -156,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("debug", "入力した回答" + answerString)
 
             messageData =
-                messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を100点満点で採点してください。返答の形式は点数を示すint型で返して。\"}"
+                messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を100点満点で採点してください。返答の形式は1から100の整数値で返して。 例「10」 \"}"
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
             val result = receiveChatGptResponse(urlFull)
@@ -190,6 +194,14 @@ class MainActivity : AppCompatActivity() {
                 Log.d("debug", "模範解答：" + out)
                 messageData = ""
             }
+        }
+    }
+
+    // やり直すボタン
+    private inner class RetryListener : View.OnClickListener {
+        override fun onClick(v: View?) {
+            val output = findViewById<TextView>(R.id.chatgptAnswer)
+            output.text = ""
         }
     }
 }
