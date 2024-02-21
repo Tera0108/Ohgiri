@@ -3,6 +3,7 @@ package com.websarva.wings.android.ohgiri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Debug
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -160,7 +161,7 @@ class MainActivity : AppCompatActivity() {
             Log.d("debug", "入力した回答" + answerString)
 
             messageData =
-                messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を100点満点で採点してください。返答の形式は1から100の整数値で返して。 例「10」 \"}"
+                messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を10点満点で採点してください。返答の形式は1から10の整数値で返して。 例「1」 \"}"
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
             val result = receiveChatGptResponse(urlFull)
@@ -200,8 +201,15 @@ class MainActivity : AppCompatActivity() {
     // やり直すボタン
     private inner class RetryListener : View.OnClickListener {
         override fun onClick(v: View?) {
-            val output = findViewById<TextView>(R.id.chatgptAnswer)
-            output.text = ""
+            val outputTheme = findViewById<TextView>(R.id.theme)
+            outputTheme.text = ""
+            val outputAnswer = findViewById<TextInputEditText>(R.id.answer)
+            outputAnswer.text = Editable.Factory.getInstance().newEditable("")
+            val outputScoreResult = findViewById<TextView>(R.id.scoreResult)
+            outputScoreResult.text = "-"
+            val outputChatgptAnswer = findViewById<TextView>(R.id.chatgptAnswer)
+            outputChatgptAnswer.text = ""
+            messageData = ""
         }
     }
 }
