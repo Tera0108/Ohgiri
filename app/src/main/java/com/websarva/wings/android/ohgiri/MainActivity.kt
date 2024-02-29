@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             val output = findViewById<TextView>(R.id.theme)
 
             messageData =
-                "{\"role\": \"system\", \"content\":\"あなたはお笑い芸人です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}"
+                "{\"role\": \"system\", \"content\":\"あなたは松本人志です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}"
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
             val result = receiveChatGptResponse(urlFull)
@@ -184,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             val output = findViewById<TextView>(R.id.chatgptAnswer)
 
-            messageData = messageData + ",{\"role\": \"user\", \"content\":\"大喜利のお題の「" + theme + "」の模範解答を1つ考えてください。30文字以内でお願いします。\"}"
+            messageData = messageData + ",{\"role\": \"user\", \"content\":\"大喜利のお題の「" + theme + "」の爆笑解答を1つ考えてください。20文字以内でお願いします。例えば、お題「魔法使いが覚えたけど、結局使わない魔法とは？」で、回答「半透明人間になれる」です。\"}"
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
             val result = receiveChatGptResponse(urlFull)
