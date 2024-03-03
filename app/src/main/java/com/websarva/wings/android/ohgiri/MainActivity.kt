@@ -7,6 +7,7 @@ import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.WorkerThread
 import com.google.android.material.textfield.TextInputEditText
@@ -24,6 +25,7 @@ import java.util.concurrent.Executors
 
 class MainActivity : AppCompatActivity() {
 
+    var temperature = "";
     var messageData = "";
     var theme = "";
 
@@ -54,6 +56,8 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             val output = findViewById<TextView>(R.id.theme)
 
+            temperature = "1.0";
+
             messageData =
                 "{\"role\": \"system\", \"content\":\"あなたは松本人志です。\"},{\"role\": \"user\", \"content\":\"大喜利のお題を考えてください。\"}"
 
@@ -65,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 output.text = theme
                 messageData =
                     messageData + ",{\"role\": \"assistant\", \"content\":\"" + theme + "\"}"
-                Log.d("debug", "お題追加：" + messageData)
+                Log.d("debug", "お題追加：" + messageData + "temperature設定値" + temperature)
             }
         }
     }
@@ -105,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             val bodyData =
-                "{\"model\":\"gpt-3.5-turbo\",\"messages\":[" + messageData + "],\"temperature\":1.0,\"max_tokens\":100}"
+                "{\"model\":\"gpt-3.5-turbo\",\"messages\":[" + messageData + "],\"temperature\":" + temperature + ",\"max_tokens\":100}"
 
             Log.d("debug", "リクエスト：" + bodyData)
 
@@ -160,6 +164,8 @@ class MainActivity : AppCompatActivity() {
 
             Log.d("debug", "入力した回答" + answerString)
 
+            temperature = "0.3";
+
             messageData =
                 messageData + ",{\"role\": \"user\", \"content\":\"回答「" + answerString + "」を10点満点で採点してください。返答の形式は1から10の整数値で返して。 例「1」 \"}"
 
@@ -172,7 +178,7 @@ class MainActivity : AppCompatActivity() {
                 Log.d("debug", "点数：" + score)
                 messageData =
                     messageData + ",{\"role\": \"assistant\", \"content\":\"" + score + "\"}"
-                Log.d("debug", "点数追加：" + messageData)
+                Log.d("debug", "点数追加：" + messageData + "temperature設定値" + temperature)
             }
 
         }
@@ -184,6 +190,8 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             val output = findViewById<TextView>(R.id.chatgptAnswer)
 
+            temperature = "0.3";
+
             messageData = messageData + ",{\"role\": \"user\", \"content\":\"大喜利のお題の「" + theme + "」の爆笑解答を1つ考えてください。20文字以内でお願いします。例えば、お題「魔法使いが覚えたけど、結局使わない魔法とは？」で、回答「半透明人間になれる」です。\"}"
 
             val urlFull = "https://api.openai.com/v1/chat/completions"
@@ -192,7 +200,7 @@ class MainActivity : AppCompatActivity() {
                 val out = result.getJSONArray("choices").getJSONObject(0).getJSONObject("message")
                     .getString("content")
                 output.text = out
-                Log.d("debug", "模範解答：" + out)
+                Log.d("debug", "模範解答：" + out + "temperature設定値" + temperature)
                 messageData = ""
             }
         }
@@ -210,6 +218,10 @@ class MainActivity : AppCompatActivity() {
             val outputChatgptAnswer = findViewById<TextView>(R.id.chatgptAnswer)
             outputChatgptAnswer.text = ""
             messageData = ""
+
+            val sv = findViewById(R.id.scrollView) as ScrollView;
+            sv.fullScroll(ScrollView.FOCUS_UP);
+
         }
     }
 }
